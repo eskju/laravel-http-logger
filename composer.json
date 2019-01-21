@@ -1,0 +1,49 @@
+{
+    "name": "eskju/laravel-http-logger",
+    "description": "A Laravel 5 package to log HTTP requests",
+    "keywords": [
+        "esKju",
+        "laravel-http-logger"
+    ],
+    "homepage": "https://github.com/eskju/laravel-http-logger",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Christian Witte",
+            "email": "info@sq-webdesign.de",
+            "homepage": "https://www.sq-webdesign.de",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.1",
+        "illuminate/support": "~5.6.0|~5.7.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "~3.6.0|~3.7.0",
+        "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Eskju\\HttpLogger\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Eskju\\HttpLogger\\Test\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eskju\\HttpLogger\\HttpLoggerServiceProvider"
+            ]
+        }
+    }
+}
