@@ -24,13 +24,13 @@ class DefaultLogWriter implements LogWriter
         $this->request = $request;
         $this->response = $response;
         $time = (microtime(true) - LARAVEL_START);
-        $threshold = config('logging.requests.threshold');
+        $threshold = config('http-logger.threshold');
 
         if ($time < $threshold) {
             return;
         }
 
-        switch (config('logging.requests.driver')) {
+        switch (config('http-logger.driver')) {
             case 'FILE':
                 $this->logToFile();
                 break;
@@ -43,7 +43,7 @@ class DefaultLogWriter implements LogWriter
                 break;
 
             default:
-                throw new \Exception('unknown log driver "' . config('logging.requests.driver') . '"');
+                throw new \Exception('unknown log driver "' . config('http-logger.driver') . '"');
         }
     }
 
@@ -77,14 +77,13 @@ class DefaultLogWriter implements LogWriter
     private function logToURL()
     {
         try {
-            $url = config('logging.requests.remote_url');
+            $url = config('http-logger.remote_url');
             $params = ['json' => $this->getJson()];
 
             $client = new Client();
             $client->post($url, $params);
         } catch (\Exception $exception) {
             $this->logToFile();
-            dd($exception->getMessage());
         }
     }
 

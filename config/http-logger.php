@@ -5,17 +5,17 @@ return [
     /*
      * Define if logs are written to FILE or REMOTE
      */
-    'driver' => env('LOGGING_REQUESTS_DRIVER', 'FILE'),
+    'driver' => env('HTTP_LOGGER_DRIVER', 'FILE'),
 
     /*
      * In case you selected 'driver'=FILE, define an URL
      */
-    'remote_url' => env('LOGGING_REQUESTS_REMOTE_URL'),
+    'remote_url' => env('HTTP_LOGGER_REMOTE_URL'),
 
     /*
      * You might want to define a threshold to log long requests only
      */
-    'threshold' => env('LOGGING_REQUESTS_THRESHOLD', 0),
+    'threshold' => env('HTTP_LOGGER_THRESHOLD', 0),
 
     /*
      * The log profile which determines whether a request should be logged.
