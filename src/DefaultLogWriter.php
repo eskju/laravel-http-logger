@@ -16,6 +16,11 @@ class DefaultLogWriter implements LogWriter
     private $request;
 
     /**
+     * @var Response
+     */
+    private $response;
+
+    /**
      * @param Request $request
      *
      * @throws \Exception
@@ -106,6 +111,8 @@ class DefaultLogWriter implements LogWriter
             'body' => $this->request->except(config('http-logger.except')),
             'encoding' => $this->request->getEncodings(),
             'content_type' => $this->request->getContentType(),
+            'response_code' => $this->response->getStatusCode(),
+            'response_content' => $this->response->getContent()
         ];
     }
 }
