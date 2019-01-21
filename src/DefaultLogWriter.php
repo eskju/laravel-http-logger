@@ -22,10 +22,9 @@ class DefaultLogWriter implements LogWriter
 
     /**
      * @param Request $request
-     *
      * @throws \Exception
      */
-    public function logRequest(Request $request, Response $response)
+    public function logRequest(Request $request, $response)
     {
         $this->request = $request;
         $this->response = $response;
@@ -63,7 +62,6 @@ class DefaultLogWriter implements LogWriter
 
     /**
      * return a formatted message string
-     *
      * @return string
      */
     private function getMessage()
@@ -95,7 +93,6 @@ class DefaultLogWriter implements LogWriter
 
     /**
      * return a json object
-     *
      * @return array
      */
     private function getJson()
