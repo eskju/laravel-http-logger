@@ -8,7 +8,9 @@ class HttpLoggerServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        define('REQUEST_ID', uniqid());
+        if (!defined('REQUEST_ID')) {
+            define('REQUEST_ID', uniqid());
+        }
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
