@@ -3,6 +3,7 @@
 namespace Eskju\HttpLogger;
 
 use GuzzleHttp\Client;
+use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -19,6 +20,11 @@ class DefaultLogWriter implements LogWriter
      * @var Response
      */
     private $response;
+
+    /**
+     * @var array
+     */
+    private $queries = [];
 
     /**
      * @param Request $request
@@ -58,6 +64,7 @@ class DefaultLogWriter implements LogWriter
     private function logToFile()
     {
         Log::channel('requests')->info($this->getMessage());
+        Log::channel('queries')->info(json_encode($this->queries));
     }
 
     /**
@@ -82,11 +89,12 @@ class DefaultLogWriter implements LogWriter
     {
         try {
             $url = config('http-logger.remote_url');
-            $params = ['json' => $this->getJson()];
+            $params = ['json' => $this->getJson(), 'verify' => false];
 
             $client = new Client();
             $client->post($url, $params);
         } catch (\Exception $exception) {
+            Log::error($exception->getMessage());
             $this->logToFile();
         }
     }
@@ -109,7 +117,28 @@ class DefaultLogWriter implements LogWriter
             'encoding' => $this->request->getEncodings(),
             'content_type' => $this->request->getContentType(),
             'response_code' => $this->response->getStatusCode(),
-            'response_content' => $this->response->getContent()
+            'response_content' => $this->response->getContent(),
+            'queries' => $this->queries
         ];
+    }
+
+    /**
+     * @param $query
+     */
+    public function addQuery(QueryExecuted $query)
+    {
+        $id = md5($query->sql);
+
+        if (!key_exists($id, $this->queries)) {
+            $this->queries[$id] = [
+                'time' => $query->time,
+                'count' => 1,
+                'sql' => $query->sql,
+                'bindings' => $query->bindings,
+            ];
+        } else {
+            $this->queries[$id]['count']++;
+            $this->queries[$id]['time'] += $query->time;
+        }
     }
 }

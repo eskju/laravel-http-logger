@@ -20,6 +20,16 @@ class HttpLoggerServiceProvider extends ServiceProvider
 
         $this->app->singleton(LogProfile::class, config('http-logger.log_profile'));
         $this->app->singleton(LogWriter::class, config('http-logger.log_writer'));
+
+        try {
+            $this->app['db']->listen(
+                function ($query, $bindings = null, $time = null, $connectionName = null) {
+                    $log = $this->app->make(LogWriter::class);
+                    $log->addQuery($query);
+                }
+            );
+        } catch (\Exception $e) {
+        }
     }
 
     public function register()
