@@ -94,8 +94,7 @@ class DefaultLogWriter implements LogWriter
             $client = new Client();
             $client->post($url, $params);
         } catch (\Exception $exception) {
-            exit(json_encode($this->getJson()));
-            dd($exception->getMessage());
+            Log::error($exception->getMessage());
             $this->logToFile();
         }
     }
