@@ -10,20 +10,13 @@ Differences:
 - Added Treshold Option
 - File-Logger Fallback
 - Provide a JSON with a lot of information
+- Logs SQL queries
+- Generates unique request IDs
 
 ## Usage
 
-Add the following lines to your composer.json
 ```
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/eskju/laravel-http-logger"
-    }
-  ],
-  "require": {
-    "eskju/laravel-http-logger": "*"
-  }
+composer require eskju/laravel-http-logger
 ```
 
 ## Publish Config
