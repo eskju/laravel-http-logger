@@ -118,7 +118,8 @@ class DefaultLogWriter implements LogWriter
             'content_type' => $this->request->getContentType(),
             'response_code' => $this->response->getStatusCode(),
             'response_content' => $this->response->getContent(),
-            'queries' => $this->queries
+            'queries' => $this->queries,
+            'user_id' => !auth()->guest() ? auth()->id : null
         ];
     }
 
