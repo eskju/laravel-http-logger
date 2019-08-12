@@ -78,9 +78,13 @@ class DefaultLogWriter implements LogWriter
         $uri = $this->request->getPathInfo();
         $bodyAsJson = json_encode($this->request->except(config('http-logger.except')));
 
-        $files = array_map(function (UploadedFile $file) {
-            return $file->getClientOriginalName();
-        }, iterator_to_array($this->request->files));
+        foreach ($_FILES as $file) {
+            foreach ($file['name'] as $name) {
+                $files[] = $name;
+            }
+        }
+
+        $files = [];
 
         return $time . ' | ' . $method . ' ' . $uri . ' - Body: ' . $bodyAsJson . ' - Files: ' . implode(', ', $files);
     }
