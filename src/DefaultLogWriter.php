@@ -7,7 +7,6 @@ use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class DefaultLogWriter implements LogWriter
 {
@@ -77,14 +76,17 @@ class DefaultLogWriter implements LogWriter
         $method = strtoupper($this->request->getMethod());
         $uri = $this->request->getPathInfo();
         $bodyAsJson = json_encode($this->request->except(config('http-logger.except')));
+        $files = [];
 
-        foreach ($_FILES ?? [] as $file) {
-            foreach ($file['name'] as $name) {
-                $files[] = $name;
+        foreach ($_FILES as $file) {
+            if (is_array($file['name'])) {
+                foreach ($file['name'] as $name) {
+                    $files[] = $name;
+                }
+            } else {
+                $files[] = $file['name'];
             }
         }
-
-        $files = [];
 
         return $time . ' | ' . $method . ' ' . $uri . ' - Body: ' . $bodyAsJson . ' - Files: ' . implode(', ', $files);
     }
